@@ -1,5 +1,6 @@
 1)COMPASSCLOCK - npm create vite@latest
 	       Go to Windows Powershell Run as Administrator type --Set-ExecutionPolicy RemoteSigned(if needed)
+			Set-ExecutionPolicy RemoteSigned
 ----------------------------------------------------------------------------------------------------------------------
 import React, { useState, useEffect } from "react";
 
@@ -435,3 +436,4 @@ function App() {
 }
 
 export default App;
+
