@@ -1,0 +1,271 @@
+1)SUBLIST
+---------
+l1 = [1,2,3,4,5,6]
+l2 = [2,3]
+print("all elements of l1 " , l1)
+print("all elements of l2 " , l2)
+s1 = set(l1)
+s2 = set(l2)
+print("Subset : " ,s2.issubset(s1))
+-------------------------------------------------------
+2)DICTIONARY
+-------------
+dict = [
+    {"m1" : 25 , "m2" : 25},
+    {"m1" : 50 , "m2" : 25},
+    {"m1" : 75 , "m2" : 25},
+]
+
+for mark in dict:
+    mark["avg"] = (mark["m1"] + mark["m2"]) / 2
+for mark in dict:
+    print(mark)
+--------------------------------------------------------
+3)TUPLE MANIPULATION
+--------------------
+tup = (1,2,3,4,5)
+print(tup[1])
+print(tup[1:3])
+l = list(tup)
+l[0] = 100
+tup = tuple(l)
+print(tup)
+---------------------------------------------------------
+4)POWERS
+---------
+import numpy as np
+import pandas as pd
+
+arr1 = np.array([[1,2,3] , [4,5,6]])
+arr2 = np.array([[4,5,6] , [7,8,9]])
+
+print("numpy pow results")
+print(np.power(arr1 , arr2))
+
+s1 = pd.Series(arr1.flatten())
+s2 = pd.Series(arr2.flatten())
+
+r = s1.pow(s2)
+print("pandas power")
+print(r)
+------------------------------------------------------
+5)PANAGRAM
+----------
+import string
+def ispanagram(str):
+    alphabet = "qwertyuiopasdfghjklzxcvbnm"
+    for char in alphabet:
+        if char not in str.lower():
+            return False
+    return True
+str = "the five boxing wizards jump quickly"
+if ispanagram(str) == True:
+    print("Panagram")
+else:
+    print("not a panagram")
+----------------------------------------------------
+6)KFOLD
+-------
+from sklearn import datasets
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.model_selection import KFold , cross_val_score
+
+X , y = datasets.load_iris(return_X_y=True)
+clf = DecisionTreeClassifier(random_state=42)
+kf = KFold(n_splits=5)
+
+scores = cross_val_score(clf , X , y , cv=kf)
+for i , score in enumerate(scores , start=1):
+    print(f"Fold {i} , {score:.4f}")
+print(scores.mean())
+print(len(scores))
+----------------------------------------------------
+7)CSVPROG
+----------
+import csv
+with open('D:\EXCEL LEARNING\sample.csv' , mode='r') as file:
+    csv_reader = csv.reader(file)
+    for row in csv_reader:
+        print(row)
+-------------------------------------------------------------
+8)KMEANS
+---------
+data from KMEANS 
+create csv file in excel for these cols
+ID,Gender,Age,Annual Income (k$),Spending Score (1-100)
+---------------------------------------------------
+import pandas as pd
+import matplotlib.pyplot as plt
+from sklearn.cluster import KMeans
+
+# Load and select features (Annual Income & Spending Score)
+X = pd.read_csv(r"E:\sem3\ML\Mall_Customers.csv").iloc[:, [3, 4]].values
+
+# Elbow Method to find optimal clusters
+wcss = [KMeans(n_clusters=i, init='k-means++', random_state=42).fit(X).inertia_ for i in range(1, 11)]
+plt.plot(range(1, 11), wcss, 'o-')
+plt.title('Elbow Method')
+plt.xlabel('Number of Clusters')
+plt.ylabel('WCSS')
+plt.show()
+
+# Apply K-Means with 5 clusters
+kmeans = KMeans(n_clusters=5, init='k-means++', random_state=42)
+y_pred = kmeans.fit_predict(X)
+
+# Visualize the clusters
+colors = ['b', 'g', 'r', 'c', 'm']
+for i in range(5):
+    plt.scatter(X[y_pred == i, 0], X[y_pred == i, 1], s=100, c=colors[i], label=f'Cluster {i+1}')
+
+# Plot the centroids
+plt.scatter(kmeans.cluster_centers_[:, 0], kmeans.cluster_centers_[:, 1],
+            s=300, c='y', label='Centroids')
+
+plt.title('Customer Clusters')
+plt.xlabel('Annual Income (k$)')
+plt.ylabel('Spending Score (1–100)')
+plt.legend()
+plt.show()
+----------------------------------------------------------------------------------------------
+9)NAIVE BAYES
+-------------
+import numpy as np
+from sklearn.naive_bayes import GaussianNB
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score
+x = np.array([[1,2] , [2,3] , [3,4] , [4,5] , [5,6] , [6,7] , [7 , 8] , [8 ,9] , [ 9 , 10] , [ 10 , 11]])
+y = np.array([0,0,0,0,1,1,1,1,1,1])
+x_train , x_test , y_train , y_test = train_test_split(x , y , test_size=0.3)
+model = GaussianNB().fit(x_train , y_train)
+print(f"Accuracy : {accuracy_score(y_test , model.predict(x_test)) * 100:.2f}%")
+-------------------------------------------------------------------------------------------------------
+10)LOGISTIC REGRESSION
+------------------------
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
+
+# Load binary Iris data (only classes 0 and 1)
+X, y = load_iris(return_X_y=True)
+X, y = X[y != 2], y[y != 2]  # Filter out class 2
+
+# Split into train/test sets
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.3, random_state=42
+)
+
+# Train Logistic Regression
+model = LogisticRegression().fit(X_train, y_train)
+
+# Predict
+y_pred = model.predict(X_test)
+
+# Evaluate
+print(f"Accuracy: {accuracy_score(y_test, y_pred)*100:.2f}%")
+print("\nClassification Report:\n", classification_report(y_test, y_pred))
+print("Confusion Matrix:\n", confusion_matrix(y_test, y_pred))
+
+# Visualization (Decision boundary using first 2 features)
+X_train_2D = X_train[:, :2]
+model_2D = LogisticRegression().fit(X_train_2D, y_train)
+
+x_min, x_max = X_train_2D[:, 0].min() - 1, X_train_2D[:, 0].max() + 1
+y_min, y_max = X_train_2D[:, 1].min() - 1, X_train_2D[:, 1].max() + 1
+xx, yy = np.meshgrid(np.arange(x_min, x_max, 0.1),
+                     np.arange(y_min, y_max, 0.1))
+
+Z = model_2D.predict(np.c_[xx.ravel(), yy.ravel()]).reshape(xx.shape)
+
+plt.contourf(xx, yy, Z, alpha=0.3, cmap='coolwarm')
+plt.scatter(X_train_2D[:, 0], X_train_2D[:, 1],
+            c=y_train, edgecolor='k', cmap='coolwarm')
+plt.title("Decision Boundary (Logistic Regression)")
+plt.xlabel("Feature 1 (Sepal Length)")
+plt.ylabel("Feature 2 (Sepal Width)")
+plt.show()
+------------------------------------------------------------------------------------------
+11)Stacking Classifier
+-----------------------
+import numpy as np
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import StackingClassifier
+from sklearn.linear_model import LogisticRegression
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.svm import SVC
+from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
+
+# Load dataset
+X, y = load_iris(return_X_y=True)
+
+# Split data
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.3, random_state=42
+)
+
+# Define base models
+base_models = [
+    ('dt', DecisionTreeClassifier(random_state=42)),
+    ('knn', KNeighborsClassifier()),
+    ('svc', SVC(probability=True, random_state=42))
+]
+
+# Meta (final) model
+meta_model = LogisticRegression()
+
+# Create stacking classifier
+stack_model = StackingClassifier(
+    estimators=base_models,
+    final_estimator=meta_model,
+    cv=5
+)
+
+# Train model
+stack_model.fit(X_train, y_train)
+
+# Predict
+y_pred = stack_model.predict(X_test)
+
+# Evaluate
+print(f"Accuracy: {accuracy_score(y_test, y_pred) * 100:.2f}%")
+print("Confusion Matrix:\n", confusion_matrix(y_test, y_pred))
+print("Classification Report:\n", classification_report(y_test, y_pred))
+-------------------------------------------------------------------------------------------------
+12)SVM decision boundary visualization
+----------------------------------------
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.datasets import make_blobs
+from sklearn.svm import SVC
+
+# Generate synthetic binary data
+X, Y = make_blobs(n_samples=500, centers=2, cluster_std=0.4, random_state=0)
+
+# Train linear SVM
+clf = SVC(kernel='linear')
+clf.fit(X, Y)
+
+# Predictions for sample points
+samples = [[0, 0], [2, 3]]
+for s in samples:
+    print(f"Prediction for {s}: {clf.predict([s])[0]}")
+
+# Decision boundary
+xfit = np.linspace(X[:, 0].min() - 1, X[:, 0].max() + 1, 100)
+w = clf.coef_[0]
+b = clf.intercept_[0]
+yfit = - (w[0] / w[1]) * xfit - b / w[1]
+
+# Plot data and boundary
+plt.scatter(X[:, 0], X[:, 1], c=Y, s=50, cmap='spring', edgecolor='k')
+plt.plot(xfit, yfit, 'k-', lw=2)
+plt.title("SVM Decision Boundary")
+plt.xlabel("Feature 1")
+plt.ylabel("Feature 2")
+plt.show()
+---------------------------------------------------------------------------------------------------------
