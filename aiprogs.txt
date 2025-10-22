@@ -187,23 +187,14 @@ print(f"Cost: {best}, Path: (0 -> {path[0]} -> {path[1]} -> {path[2]} -> 0)")
 ---------------------------------------------------------------------------------------------------------------
 7)TOWER OF HANOI
 -----------------
-from itertools import permutations
-d = [
-    [0, 10, 15, 20],
-    [10, 0, 35, 25],
-    [15, 35, 0, 30],
-    [20, 25, 30, 0]
-]
-best = float('inf')
-path = []
-for trip in permutations([1, 2, 3]):
-    a, b, c = trip
-    cost = d[0][a] + d[a][b] + d[b][c] + d[c][0]
-    if cost < best:
-        best = cost
-        path = trip
-
-print(f"Cost: {best}, Path: (0 -> {path[0]} -> {path[1]} -> {path[2]} -> 0)")
+def Tower_of_hanoi(n , s , a ,d):
+    if n ==0:
+        return
+    Tower_of_hanoi(n - 1 , s , d ,a)
+    print(f"Move disk {n} from {s} to {d}")
+    Tower_of_hanoi(n - 1 , a , s ,d)
+n = 3
+Tower_of_hanoi(n , 'A' , 'B' , 'C')
 ---------------------------------------------------------------------------------------------------------------------------
 8)MONKEY BANANA
 ----------------
@@ -384,4 +375,5 @@ with open(input_path, "r", encoding="utf-8") as f1, open(output_path, "w", encod
         filtered = [w for w in words if w.lower() not in stop]
         f2.write(" ".join(filtered) + "\n")
 print(f"✅ Done! Output saved to {output_path}")
+
 -----------------------------------------------------------------------------------------------------------
