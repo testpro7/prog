@@ -1,0 +1,10 @@
+7)TOWER OF HANOI
+-----------------
+def Tower_of_hanoi(n , s , a ,d):
+    if n ==0:
+        return
+    Tower_of_hanoi(n - 1 , s , d ,a)
+    print(f"Move disk {n} from {s} to {d}")
+    Tower_of_hanoi(n - 1 , a , s ,d)
+n = 3
+Tower_of_hanoi(n , 'A' , 'B' , 'C')
